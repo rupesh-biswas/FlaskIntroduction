@@ -1,9 +1,9 @@
-from email.policy import default
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
@@ -16,9 +16,12 @@ class Todo(db.Model):
         return '<Task %r>' % self.id
 
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
-    return render_template('index.html')
+    if request.method == 'POST':
+        return 'Hello'
+    else:
+        return render_template('index.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
